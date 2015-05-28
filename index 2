@@ -1,0 +1,204 @@
+<html>
+
+<!--This is my Tic Tac Toe rpogram for class. The frit section 
+below is showing the title and setting its size. I have also defined the 
+body background and text colors in case i want to change them later--> 
+<head><h1>TicTacToe</h1></head>
+
+
+<body bgcolor="white" text="blue">
+</br>
+</br>
+<h2>Welcome to Tic Tac Toe... enjoy!</h2>
+</br>
+</br>
+
+
+<!--Starting the TicTacToe board and functions-->
+<style>
+
+
+<!--Building the board and button sizes-->
+#game {
+  overflow: auto;
+  width: 300px
+  height: 300px;
+  border: 1px solid #ddd;
+  background: #eee;
+  padding: 10px;
+}
+
+#game div {
+  clear: both;
+}
+
+#game button {
+  display: block;
+  float: left;
+  width: 50px;
+  height: 50px;
+  margin: 5px 10px;
+}
+
+#gameActionDisplay {
+  padding: 20px 10px;
+}
+</style>
+
+<div id="game">
+
+<div>
+  <button></button>
+  <button></button>
+  <button></button>
+</div>
+
+<div>
+  <button></button>
+  <button></button>
+  <button></button>
+</div>
+
+<div>
+  <button></button>
+  <button></button>
+  <button></button>
+</div>
+</div>
+
+<div id="gameActionDisplay"></div>
+</div>
+
+<script>
+
+var Display = function(displayElement) {
+  var display = displayElement;
+  function setText(message) {
+    display.innerText = message;
+  }
+
+  return {setMessage: setText};
+};
+
+function isValid(btn) {
+  return btn.innerText.length == 0;
+}
+
+function checkScore(btn, squares) {
+  console.log("click");
+  console.log(btn);
+  console.log(squares);
+}
+
+function setMark(btn, players, currentTurn) {
+  btn.innerText = players[currentTurn];
+}
+
+
+<!--this allows for the game to analyse if you win or not-->
+function checkForWinner(squares, players, currentTurn) {
+  if (squares[0].innerText == players[currentTurn] &&
+      squares[1].innerText == players[currentTurn] &&
+      squares[2].innerText == players[currentTurn])
+    return true;
+
+  if (squares[3].innerText == players[currentTurn] &&
+      squares[4].innerText == players[currentTurn] &&
+      squares[5].innerText == players[currentTurn])
+    return true;
+
+  if (squares[6].innerText == players[currentTurn] &&
+      squares[7].innerText == players[currentTurn] &&
+      squares[8].innerText == players[currentTurn])
+    return true;
+
+  if (squares[0].innerText == players[currentTurn] &&
+      squares[3].innerText == players[currentTurn] &&
+      squares[6].innerText == players[currentTurn])
+    return true;
+
+  if (squares[1].innerText == players[currentTurn] &&
+      squares[4].innerText == players[currentTurn] &&
+      squares[7].innerText == players[currentTurn])
+    return true;
+
+  if (squares[2].innerText == players[currentTurn] &&
+      squares[5].innerText == players[currentTurn] &&
+      squares[8].innerText == players[currentTurn])
+    return true;
+
+  if (squares[0].innerText == players[currentTurn] &&
+      squares[4].innerText == players[currentTurn] &&
+      squares[8].innerText == players[currentTurn])
+    return true;
+
+  if (squares[2].innerText == players[currentTurn] &&
+      squares[4].innerText == players[currentTurn] &&
+      squares[6].innerText == players[currentTurn])
+    return true;
+
+  return false;
+}
+
+function isFullBoard(squares) {
+  for (var i = 0, len = squares.length; i < len; i++)
+    if (squares[i].innerText.length == 0)
+      return false;
+
+  return true;
+}
+
+function isDraw(squares) {
+  return (!checkForWinner(squares, ["X"], 0)) && isFullBoard(squares);
+}
+
+function main() {
+  var squares = document.querySelectorAll("#game button");
+  var players = ["X", "O"];
+  var currentTurn = 0;
+  var isGameOver = false;
+  var display = new Display(document.querySelector("#gameActionDisplay"));
+
+  display.setMessage("Player 'X' begins");
+
+  for (var i = 0, len = squares.length; i < len; i++)
+    squares[i].addEventListener("click", function(){
+      if (isGameOver)
+        return;
+
+      if (!isValid(this)) {
+        display.setMessage("Invalid choice");
+      } else {
+        setMark(this, players, currentTurn);
+
+        isGameOver = checkForWinner(squares, players, currentTurn);
+        if (isGameOver) {
+          display.setMessage("Player '" + players[currentTurn] + "' WINS!");
+          return;
+        }
+
+        if (isDraw(squares)) {
+          display.setMessage("DRAW!");
+          return;
+        }
+
+		
+<!--this allow you to take turns for each player-->
+        currentTurn += 1;
+        currentTurn %= 2;
+
+        display.setMessage("Player '" + players[currentTurn] + "' to move");
+      }
+
+    });
+}
+
+(function(){ main();})();
+</script>
+
+</br>
+</br>
+<p><h3>To reset the game, please refresh your browser!</h3></p>
+
+</body>
+</html>
